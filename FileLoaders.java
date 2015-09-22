@@ -2,6 +2,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
+import javax.swing.JFileChooser;
+
 /**
  * Text file management class for IDE code challenge
  * @author Kevin Phair
@@ -34,45 +36,30 @@ public class FileLoaders {
 	 * @return String containing all the lines of the file delimited by newlines.
 	 */
 	public String read (String inputFile) {
-	    BufferedReader inFile = null;
-	    String fileData = "";
-	    String inLine = null;
+		String fileData = "";
 
-	    // If filename is empty then bring up a file selector window to pick one
+		// If filename is empty then bring up a file selector window to pick one
 		if (inputFile == null || inputFile.length() == 0) {
-			System.out.println("No filename provided, bringing up chooser");
 			JFileChooser jfc = new JFileChooser(System.getProperty("user.dir"));
 			jfc.showOpenDialog(null);
 			inputFile = jfc.getSelectedFile().getPath();
-			System.out.println("File chooser returned " + inputFile);
-		}	    
-	    // Make sure input file name is valid
-	    if (inputFile == null || inputFile.length() == 0) {
-	        System.out.println("No input file supplied.");
-	    } else {
-	        System.out.println("Using " + inputFile + " for input");
-	    
+		}
+
+		// Make sure input file name is valid before trying to open it
+	    if (inputFile != null && inputFile.length() > 0) {
 	        // open file for input
 	        try {
-	            inFile = new BufferedReader(new FileReader(inputFile));
+	    	    BufferedReader inFile = new BufferedReader(new FileReader(inputFile));
+	    	    String inLine = null;
+	            while (true) {
+	            	inLine = inFile.readLine();
+	            	if (inLine == null) break;
+	            	fileData += inLine + "\n";
+	            }
+	            inFile.close();
+	            
 	        } catch (IOException e) {
 	        	e.printStackTrace();
-	        }
-	        
-	        if (inFile != null) {
-		        try {
-	            	 while (true) {
-	            		 inLine = inFile.readLine();
-	            		 if (inLine == null) {
-	            			 System.out.println("End of file reached");
-	            			 break;
-	            		 }
-	            		 fileData += inLine + "\n";
-	            	 }
-		        	inFile.close();
-		        } catch (IOException e) {
-		            e.printStackTrace();
-		        }
 	        }
 	    }
 	    return fileData;
