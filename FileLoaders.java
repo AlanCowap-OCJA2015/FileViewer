@@ -8,23 +8,26 @@ import java.io.IOException;
  * @version 1.0
  * 22 September 2015
  */
-class TextFile { 
 
+public class FileLoaders {
+	private static String[] keywords;
+	
 	/**
 	 * Read a text file in as a String array with each line as a separate element
 	 * @param file name of source file
 	 * @return String[] of text lines or null if error or no file processed
 	 */
-	public String[] readAsArray (String inputFile) {
-		String fileData = read (inputFile);
-
-		if (fileData != null && fileData.length() > 0) {
-			return fileData.split("\n");
-		} else {
+	public String[] openLanguage(String language){
+		String strKeywords = "";
+		language += "Keywords.txt";
+		strKeywords = read(language);
+		if (strKeywords != null && strKeywords.length() > 0) {
+			keywords = strKeywords.split("\n");
+			return keywords;
+		}else {
 			return null;
 		}
 	}
-	
 	/**
 	 * Read a text file in a one big string
 	 * @param file name of source file
@@ -66,4 +69,5 @@ class TextFile {
 	    }
 	    return fileData;
 	}
+		
 }
