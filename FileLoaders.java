@@ -1,5 +1,7 @@
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 
 import javax.swing.JFileChooser;
@@ -64,5 +66,35 @@ public class FileLoaders {
 	    }
 	    return fileData;
 	}
+
+	/**
+	 * Write a String to a text file
+	 * @param String to be written
+	 * @param filename to be written to
+	 */
+	public void write (String outputString, String filename) {
+
+		// check just in case String was not initialised
+		if (outputString == null) return;
 		
+		// If filename is empty then bring up a file selector window to pick one
+		if (filename == null || filename.length() == 0) {
+			JFileChooser jfc = new JFileChooser(System.getProperty("user.dir"));
+			jfc.showOpenDialog(null);
+			filename = jfc.getSelectedFile().getPath();
+		}
+
+		// Check for an actual filename before trying to save it
+	    if (filename != null && filename.length() > 0) {
+	        // open file for input
+	        try {
+	    	    BufferedWriter outFile = new BufferedWriter (new FileWriter (filename));
+            	outFile.write(outputString);
+	            outFile.close();
+	            
+	        } catch (IOException e) {
+	        	e.printStackTrace();
+	        }
+	    }
+	}
 }
