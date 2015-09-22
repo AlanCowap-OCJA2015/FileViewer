@@ -1,6 +1,8 @@
 package GJKApp;
 
 import java.awt.Color;
+import java.awt.Font;
+
 import javax.swing.JTextArea;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
@@ -36,13 +38,20 @@ public class GJKHighlighter {
 				length = str.length();	//length of keyword
 				lastIndex = startLocation + length;	//last index of the keyword
 
+				if(validKeyword(startLocation,lastIndex,txtArea)){
+					continue;
+				}
+				
 				try {
 					highlight.addHighlight(startLocation, lastIndex, paint);	//add highlighting
 				} catch (BadLocationException e) {
 					// Auto-generated catch block
 					e.printStackTrace();
 				}
-
+				
+				//Font font = txtArea.getText().getF; 
+				//txtArea.setFont(font.deriveFont(Font.BOLD));
+				
 			}
 		}
 
@@ -51,6 +60,31 @@ public class GJKHighlighter {
 	public void removeHighlighter(){
 		
 		highlight.removeAllHighlights();
+		
+	}
+	
+	private boolean validKeyword(int letterBefore,int letterAfter,JTextArea txtArea){
+		
+		boolean notVaild= true;
+		char charBefore = 0;
+		char charAfter = 0;
+		
+		if(!(letterBefore <= 0)){ 									//letter index before keyword is not minus
+			charBefore = txtArea.getText().charAt(letterBefore -1);
+			
+		}
+		if(!(letterAfter >= txtArea.getText().length())){			//letter index after keyword is not bigger then string
+			charAfter = txtArea.getText().charAt(letterAfter);
+		}
+		
+		if((charBefore > 122 || charBefore < 65) && (charAfter > 122 || charAfter < 65)){ 				//is not a letter
+			if((charBefore > 57 || charBefore < 48) && (charAfter > 57 || charAfter < 48)){ //is not a number
+				notVaild = false;
+			}
+		}
+		
+		return notVaild;
+		
 		
 	}
 
