@@ -37,7 +37,15 @@ public class FileLoaders {
 	    BufferedReader inFile = null;
 	    String fileData = "";
 	    String inLine = null;
-	    
+
+	    // If filename is empty then bring up a file selector window to pick one
+		if (inputFile == null || inputFile.length() == 0) {
+			System.out.println("No filename provided, bringing up chooser");
+			JFileChooser jfc = new JFileChooser(System.getProperty("user.dir"));
+			jfc.showOpenDialog(null);
+			inputFile = jfc.getSelectedFile().getPath();
+			System.out.println("File chooser returned " + inputFile);
+		}	    
 	    // Make sure input file name is valid
 	    if (inputFile == null || inputFile.length() == 0) {
 	        System.out.println("No input file supplied.");
