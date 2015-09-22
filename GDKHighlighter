@@ -13,6 +13,8 @@ public class GJKHighlighter {
 	
 	HighlightPainter paint;
 	Highlighter highlight;
+	
+	
 
 	//takes in a array of string(the keywords) and a reference to the text area
 	public void highlight(String [] keyword,JTextArea txtArea){
@@ -20,6 +22,8 @@ public class GJKHighlighter {
 		//make highlight object
 		highlight = txtArea.getHighlighter();
 		paint = new DefaultHighlighter.DefaultHighlightPainter(Color.ORANGE);
+		
+		highlight.removeAllHighlights();
 
 
 		//search for each key word
@@ -79,7 +83,9 @@ public class GJKHighlighter {
 		
 		if((charBefore > 122 || charBefore < 65) && (charAfter > 122 || charAfter < 65)){ 				//is not a letter
 			if((charBefore > 57 || charBefore < 48) && (charAfter > 57 || charAfter < 48)){ //is not a number
-				notVaild = false;
+				if((charBefore != 36 || charBefore != 95) && (charAfter != 36 || charAfter != 95)){
+					notVaild = false;
+				}
 			}
 		}
 		
