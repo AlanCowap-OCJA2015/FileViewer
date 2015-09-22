@@ -1,0 +1,48 @@
+package GJKApp;
+
+import java.awt.Color;
+import javax.swing.JTextArea;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultHighlighter;
+import javax.swing.text.Highlighter;
+import javax.swing.text.Highlighter.HighlightPainter;
+
+public class GJKHighlighter {
+
+	//takes in a array of string(the keywords) and a reference to the text area
+	public void highlight(String [] keyword,JTextArea txtArea){
+
+		//make highlight object
+		Highlighter highlight = txtArea.getHighlighter();
+		HighlightPainter paint = new DefaultHighlighter.DefaultHighlightPainter(Color.ORANGE);
+
+
+		//search for each key word
+		for(String str:keyword){	//for every keyword
+
+			int startLocation = 0;
+			int length = 0;
+			int lastIndex = 0;
+
+
+			while(true){
+
+				if((startLocation = txtArea.getText().indexOf(str, lastIndex)) == -1){ // find start of keyword,if it is not in the text area returns -1 and breaks loop
+					break;
+				}
+				length = str.length();	//length of keyword
+				lastIndex = startLocation + length;	//last index of the keyword
+
+				try {
+					highlight.addHighlight(startLocation, lastIndex, paint);	//add highlighting
+				} catch (BadLocationException e) {
+					// Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
+		}
+
+	}
+
+}
