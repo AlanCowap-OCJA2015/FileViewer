@@ -14,11 +14,15 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JTextArea;
 import java.awt.Font;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class GUIApp extends JFrame {
 
 	private JPanel contentPane;
-
+	private JTextArea txtEditor;
+	private FileLoaders load = new FileLoaders();
+	private GDKHighlighter highlight = new GDKHighlighter();
 	/**
 	 * Launch the application.
 	 */
@@ -50,6 +54,11 @@ public class GUIApp extends JFrame {
 		mnuEditor.add(mnFile);
 		
 		JMenuItem mntmOpen = new JMenuItem("Open");
+		mntmOpen.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				txtEditor.setText(load.read("NameApp.java"));
+			}
+		});
 		mnFile.add(mntmOpen);
 		
 		JMenuItem mntmSave = new JMenuItem("Save");
@@ -59,12 +68,18 @@ public class GUIApp extends JFrame {
 		mnuEditor.add(mnLanguage);
 		
 		JMenuItem mntmJava = new JMenuItem("Java");
+		mntmJava.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				highlight("Java");
+			}
+		});
 		mnLanguage.add(mntmJava);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		
-		JTextArea txtEditor = new JTextArea();
+		txtEditor = new JTextArea();
+		txtEditor.setEditable(false);
 		txtEditor.setFont(new Font("Times New Roman", Font.PLAIN, 14));
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
@@ -76,5 +91,15 @@ public class GUIApp extends JFrame {
 				.addComponent(txtEditor, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 459, Short.MAX_VALUE)
 		);
 		contentPane.setLayout(gl_contentPane);
+	}
+	
+	private void highlight(String language){
+		String[] keywords = load.openLanguage(language);
+		if(txtEditor.getText().length() == 0){
+			return;
+		}
+		else{
+			highlight.highlight(keywords, txtEditor);
+		}
 	}
 }
