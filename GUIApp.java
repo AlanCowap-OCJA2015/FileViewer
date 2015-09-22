@@ -74,27 +74,31 @@ public class GUIApp extends JFrame {
 		JMenuItem mntmJava = new JMenuItem("Java");
 		mntmJava.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				highlight("Java");
 				strLanguage = "Java";
+				if(txtEditor.getText().length() != 0){
+					highlight("Java");
+				}
 			}
 		});
 		mnLanguage.add(mntmJava);
 		contentPane = new JPanel();
+		contentPane.setAutoscrolls(true);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		
-		txtEditor = new JTextArea();
-		txtEditor.setEditable(false);
-		txtEditor.setFont(new Font("Times New Roman", Font.PLAIN, 14));
+		JScrollPane scrollPane = new JScrollPane();
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addComponent(txtEditor, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 564, Short.MAX_VALUE)
+				.addComponent(scrollPane, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 564, Short.MAX_VALUE)
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addComponent(txtEditor, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 459, Short.MAX_VALUE)
+				.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 459, Short.MAX_VALUE)
 		);
+		
+		 txtEditor = new JTextArea();
+		scrollPane.setViewportView(txtEditor);
 		contentPane.setLayout(gl_contentPane);
 	}
 	
