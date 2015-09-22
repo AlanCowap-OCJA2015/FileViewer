@@ -23,6 +23,7 @@ public class GUIApp extends JFrame {
 	private JTextArea txtEditor;
 	private FileLoaders load = new FileLoaders();
 	private GDKHighlighter highlight = new GDKHighlighter();
+	String strLanguage;
 	/**
 	 * Launch the application.
 	 */
@@ -56,7 +57,10 @@ public class GUIApp extends JFrame {
 		JMenuItem mntmOpen = new JMenuItem("Open");
 		mntmOpen.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				txtEditor.setText(load.read("NameApp.java"));
+				txtEditor.setText(load.read(""));
+				if(strLanguage != null){
+					highlight(strLanguage);
+				}
 			}
 		});
 		mnFile.add(mntmOpen);
@@ -71,6 +75,7 @@ public class GUIApp extends JFrame {
 		mntmJava.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				highlight("Java");
+				strLanguage = "Java";
 			}
 		});
 		mnLanguage.add(mntmJava);
