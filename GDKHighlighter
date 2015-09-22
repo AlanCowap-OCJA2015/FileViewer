@@ -8,13 +8,16 @@ import javax.swing.text.Highlighter;
 import javax.swing.text.Highlighter.HighlightPainter;
 
 public class GJKHighlighter {
+	
+	HighlightPainter paint;
+	Highlighter highlight;
 
 	//takes in a array of string(the keywords) and a reference to the text area
 	public void highlight(String [] keyword,JTextArea txtArea){
 
 		//make highlight object
-		Highlighter highlight = txtArea.getHighlighter();
-		HighlightPainter paint = new DefaultHighlighter.DefaultHighlightPainter(Color.ORANGE);
+		highlight = txtArea.getHighlighter();
+		paint = new DefaultHighlighter.DefaultHighlightPainter(Color.ORANGE);
 
 
 		//search for each key word
@@ -43,6 +46,12 @@ public class GJKHighlighter {
 			}
 		}
 
+	}
+	
+	public void removeHighlighter(){
+		
+		highlight.removeAllHighlights();
+		
 	}
 
 }
