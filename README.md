@@ -1,2 +1,3 @@
 # FileViewer
-A viewer which will highlight keywords for programming languages.
+Conor Brennan, Przemek Stepien and Artjoms Porss
+working on File viewer with code higlighting
