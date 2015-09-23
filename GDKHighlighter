@@ -14,14 +14,14 @@ public class GJKHighlighter {
 	HighlightPainter paint;
 	Highlighter highlight;
 	
-	
+	Color pickedColor = Color.ORANGE;
 
 	//takes in a array of string(the keywords) and a reference to the text area
 	public void highlight(String [] keyword,JTextArea txtArea){
 
 		//make highlight object
 		highlight = txtArea.getHighlighter();
-		paint = new DefaultHighlighter.DefaultHighlightPainter(Color.ORANGE);
+		paint = new DefaultHighlighter.DefaultHighlightPainter(pickedColor);
 		
 		highlight.removeAllHighlights();
 
@@ -91,6 +91,12 @@ public class GJKHighlighter {
 		
 		return notVaild;
 		
+		
+	}
+	
+	public void setHighlightColor(Color pickedColor){
+		
+		this.pickedColor = pickedColor;
 		
 	}
 
