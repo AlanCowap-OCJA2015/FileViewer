@@ -1,33 +1,20 @@
-/*
 * GUI for the code highlighter app
-*/
 
 
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JTextArea;
-import javax.swing.JButton;
-
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.util.ArrayList;
-
-import javax.swing.JEditorPane;
-import javax.swing.JScrollBar;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.DefaultHighlighter;
-import javax.swing.text.Highlighter;
-import javax.swing.border.BevelBorder;
+import java.awt.Color;
 
 
 public class Window {
 
 	private JFrame frmCodeHighlighter;
-	private JEditorPane textArea;
+	public static final JEditorPane textArea = new JEditorPane();
 	public static JFrame window;
-
+//	public static Window window;
+	//TODO make textarea visible for other classes
+	private JComboBox comboBox;
+	private JButton btnKeywordFolder;
+	private JButton btnLoadCode;
+	private JLabel lblTheme = new JLabel("Theme");
 
 
 	/**
@@ -59,41 +46,96 @@ public class Window {
 	 */
 	private void initialize() {
 		frmCodeHighlighter = new JFrame();
+		frmCodeHighlighter.getContentPane().setBackground(Color.WHITE);
 		frmCodeHighlighter.setTitle("Code Highlighter");
-		frmCodeHighlighter.setBounds(100, 100, 507, 506);
+		frmCodeHighlighter.setBounds(100, 100, 529, 550);
 		frmCodeHighlighter.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmCodeHighlighter.getContentPane().setLayout(null);
 		
-		textArea = new JEditorPane();
-		textArea.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		textArea.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		textArea.setEditable(false);
-		textArea.setBounds(10, 11, 471, 400);
+		textArea.setBounds(10, 11, 493, 426);
 		frmCodeHighlighter.getContentPane().add(textArea);
 		
-		JButton btnLoadCode = new JButton("Load Code");
+		btnLoadCode = new JButton("Load Code");
+		btnLoadCode.setBackground(Color.WHITE);
 		btnLoadCode.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				//Logic.getCodeExtention();
-				String text = Logic.loadTextFile();
-				textArea.setText(text);
-				highlightCode();
-				//Logic.loadKeywords();
+				Thread t = new Thread(new Runnable(){
+					public void run(){
+						String text = Logic.loadTextFile();						
+						textArea.setText(text);
+						highlightCode();
+					}
+				});
+				
+				t.start();
+
+				
+				
 			}
 		});
-		btnLoadCode.setBounds(251, 422, 230, 23);
+		btnLoadCode.setBounds(251, 448, 230, 23);
 		frmCodeHighlighter.getContentPane().add(btnLoadCode);
 		
-		JButton btnKeywordFolder = new JButton("Keyword Folder");
+		btnKeywordFolder = new JButton("Keyword Folder");
+		btnKeywordFolder.setBackground(Color.WHITE);
 		btnKeywordFolder.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				Logic.locateKeywordsFolder();
 			}
 		});
-		btnKeywordFolder.setBounds(10, 422, 230, 23);
+		btnKeywordFolder.setBounds(10, 448, 230, 23);
 		frmCodeHighlighter.getContentPane().add(btnKeywordFolder);
 		
-	}
+		
+		lblTheme.setBounds(19, 485, 46, 14);
+		frmCodeHighlighter.getContentPane().add(lblTheme);
+		
+	
+	
+		String[] themes = {"Light","Dark"};
+		
+		comboBox = new JComboBox(themes);
+		comboBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(comboBox.getSelectedIndex()==1){
+					btnKeywordFolder.setBackground(Color.BLACK);
+					btnKeywordFolder.setForeground(Color.WHITE);
+					btnLoadCode.setBackground(Color.BLACK);
+					btnLoadCode.setForeground(Color.WHITE);
+					textArea.setForeground(Color.WHITE);
+					textArea.setBackground(Color.DARK_GRAY);
+					frmCodeHighlighter.getContentPane().setBackground(Color.BLACK);
+					lblTheme.setForeground(Color.WHITE);
+					comboBox.setBackground(Color.BLACK);
+					comboBox.setForeground(Color.white);
+					
+					
+					
+				}else if(comboBox.getSelectedIndex()==0){
+					btnKeywordFolder.setBackground(Color.WHITE);
+					btnKeywordFolder.setForeground(Color.BLACK);
+					btnLoadCode.setBackground(Color.WHITE);
+					btnLoadCode.setForeground(Color.BLACK);
+					textArea.setForeground(Color.BLACK);
+					textArea.setBackground(Color.WHITE);
+					frmCodeHighlighter.getContentPane().setBackground(Color.WHITE);
+					lblTheme.setForeground(Color.black);
+					comboBox.setBackground(Color.white);
+					comboBox.setForeground(Color.black);
+				}
+			}
+		});
+		comboBox.setBounds(75, 482, 80, 20);
+		frmCodeHighlighter.getContentPane().add(comboBox);
+		
+
+		
+	
+	
+}
 	
 	
 	private void highlightCode(){
