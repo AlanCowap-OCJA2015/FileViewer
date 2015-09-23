@@ -5,6 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import javax.swing.JFileChooser;
+import javax.swing.JTextArea;
 
 /**
  * Text file management class for IDE code challenge
@@ -24,7 +25,7 @@ public class FileLoaders {
 	public String[] openLanguage(String language){
 		String strKeywords = "";
 		language += "Keywords.txt";
-		strKeywords = read(language);
+		strKeywords = blockingRead(language);
 		if (strKeywords != null && strKeywords.length() > 0) {
 			keywords = strKeywords.split("\n");
 			return keywords;
@@ -32,12 +33,74 @@ public class FileLoaders {
 			return null;
 		}
 	}
+	
 	/**
-	 * Read a text file in a one big string
+	 * Non-blocking "Read a text file in as one big string"
 	 * @param file name of source file
 	 * @return String containing all the lines of the file delimited by newlines.
 	 */
-	public String read (String inputFile) {
+	public void read (String inputFile, JTextArea jta) {
+		
+		// If filename is empty then bring up a file selector window to pick one
+		if (inputFile == null || inputFile.length() == 0) {
+			JFileChooser jfc = new JFileChooser(System.getProperty("user.dir"));
+			jfc.showOpenDialog(null);
+			inputFile = jfc.getSelectedFile().getPath();
+		}
+
+		// Make sure input file name is valid before trying to open it
+	    if (inputFile != null && inputFile.length() > 0) {
+	        // open file for input
+	        try {
+	    	    BufferedReader inFile = new BufferedReader(new FileReader(inputFile));
+	    	    Thread rw = new Thread(new readWorker(inFile, jta));
+	    	    System.out.println("Spawning new readWorker...");
+	    	    rw.start();
+	        } catch (IOException e) {
+	        	e.printStackTrace();
+	        }
+	    }
+	}
+
+	/**
+	 * a readWorker thread that will read the file data in and update the
+	 * JTextArea when done
+	 */
+	class readWorker implements Runnable {
+		BufferedReader reader;
+		JTextArea jta;
+		
+		// Initialise the object with the opened reader for reading in the file
+		readWorker (BufferedReader r, JTextArea j) {
+			this.reader = r;
+			this.jta = j;
+		}
+
+		// Start reading the file in and update the JTextArea when done
+		public void run() {
+			String fileData = "";
+    	    String inLine = null;
+    	    try {
+    	    	while (true) {
+    	    		inLine = reader.readLine();
+    	    		if (inLine == null) break;
+    	    		fileData += inLine + "\n";
+    	    	}
+    	    	reader.close();
+	        } catch (IOException e) {
+	        	e.printStackTrace();
+	        }
+    	    jta.setText(fileData);
+		}
+		
+	}
+
+	/**
+	 * Blocking version of "Read a text file in a one big string"
+	 * @param file name of source file
+	 * @return String containing all the lines of the file delimited by newlines.
+	 */
+	public String blockingRead (String inputFile) {
 		String fileData = "";
 
 		// If filename is empty then bring up a file selector window to pick one
@@ -59,20 +122,20 @@ public class FileLoaders {
 	            	fileData += inLine + "\n";
 	            }
 	            inFile.close();
-	            
 	        } catch (IOException e) {
 	        	e.printStackTrace();
 	        }
 	    }
 	    return fileData;
-	}
-
+	}	
+	
 	/**
 	 * Write a String to a text file
 	 * @param String to be written
 	 * @param filename to be written to
+	 * 
 	 */
-	public void save (String outputString, String filename) {
+	public void write (String outputString, String filename) {
 
 		// check just in case String was not initialised
 		if (outputString == null) return;
@@ -84,7 +147,7 @@ public class FileLoaders {
 			filename = jfc.getSelectedFile().getPath();
 		}
 
-		// Check for an actual filename before trying to save it
+		// Make sure input file name is valid before trying to open it
 	    if (filename != null && filename.length() > 0) {
 	        // open file for input
 	        try {
@@ -97,4 +160,6 @@ public class FileLoaders {
 	        }
 	    }
 	}
+	
 }
+
