@@ -25,7 +25,7 @@ import javax.swing.border.BevelBorder;
 public class Window {
 
 	private JFrame frmCodeHighlighter;
-	private JTextArea textArea;
+	private JEditorPane textArea;
 	public static JFrame window;
 
 
@@ -64,7 +64,7 @@ public class Window {
 		frmCodeHighlighter.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmCodeHighlighter.getContentPane().setLayout(null);
 		
-		textArea = new JTextArea();
+		textArea = new JEditorPane();
 		textArea.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		textArea.setEditable(false);
 		textArea.setBounds(10, 11, 471, 400);
