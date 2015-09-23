@@ -81,7 +81,7 @@ public class FileLoaders {
 		public void run() {
 			String fileData = "";
     	    String inLine = null;
-    	    System.out.println("readWorker is reading file.");
+    	    System.out.println("readWorker is reading file...");
     	    try {
     	    	while (true) {
     	    		inLine = reader.readLine();
@@ -135,11 +135,8 @@ public class FileLoaders {
 	 * @param filename to be written to
 	 * 
 	 */
-	public void write (String outputString, String filename) {
+	public void save (String filename, JTextArea jta) {
 
-		// check just in case String was not initialised
-		if (outputString == null) return;
-		
 		// If filename is empty then bring up a file selector window to pick one
 		if (filename == null || filename.length() == 0) {
 			filename = getFilename();
@@ -150,13 +147,44 @@ public class FileLoaders {
 	        // open file for input
 	        try {
 	    	    BufferedWriter outFile = new BufferedWriter (new FileWriter (filename));
-            	outFile.write(outputString);
-	            outFile.close();
-	            
+	    	    Thread sw = new Thread(new saveWorker(outFile, jta));
+	    	    System.out.println("Spawning new saveWorker...");
+	    	    sw.start();
+	    	    System.out.println("saveWorker started.");
 	        } catch (IOException e) {
 	        	e.printStackTrace();
 	        }
 	    }
+	}
+	
+	/**
+	 * A saveWorker thread that will read the file data in and update the
+	 * JTextArea when done
+	 */
+	class saveWorker implements Runnable {
+		BufferedWriter writer;
+		JTextArea jta;
+		
+		/* Initialise the object with the opened writer writing out the file
+		 * and the JTextArea which holds the text to be saved
+		 */
+		saveWorker (BufferedWriter w, JTextArea j) {
+			this.writer = w;
+			this.jta = j;
+		}
+
+		// Start reading the file in and update the JTextArea when done
+		public void run() {
+			String fileData = jta.getText();
+    	    System.out.println("saveWorker is saving the file" + fileData.length() + " bytes.");
+    	    try {
+            	writer.write(fileData);
+	            writer.close();
+        	    System.out.println("saveWorker is done.");
+	        } catch (IOException e) {
+	        	e.printStackTrace();
+	        }
+		}
 	}
 	
 	/**
