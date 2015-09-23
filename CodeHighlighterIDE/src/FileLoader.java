@@ -14,7 +14,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
-public class FileLoader {
+public class FileLoader{
 	private String codePath = "";	//stores path to code file
 	private String keywordPath = "";
 	
@@ -46,18 +46,21 @@ public class FileLoader {
 			keywordFile = chooser.getSelectedFile();
 			keywordPath = keywordFile.getAbsolutePath() + "\\";
 			
-			//TODO to remove
-			System.out.println(keywordPath);
+			//System.out.println(keywordPath);
 		}
 	}
 	
 	
 	public ArrayList<String> loadKeywords(){
 		String extention = getCodeExtention();
-		//System.out.println(extention);
-		if(keywordPath.equals("")){ 
-			keywordPath = this.getClass().getClassLoader().getResource("keywords/").getPath(); 
+		
+		if("".equals(extention)){
+			return null;
 		}
+		//System.out.println(extention);
+//		if(keywordPath.equals("")){ 
+//			keywordPath = this.getClass().getClassLoader().getResource("keywords/").getPath(); 
+//		}
 		//System.out.println(keywordPath);
 		
 		ArrayList<String> keywords = new ArrayList<String>(80);
@@ -96,11 +99,16 @@ public class FileLoader {
 				e.printStackTrace();
 			}
 			
+			Window.textArea.setText("... LOADING TEXT FROM FILE ...");
+			
 			if(!scan.equals(null)){
+				if(!scan.hasNextLine()) text = "There is no code in a file"; 
 				while(scan.hasNextLine()){
 					text += scan.nextLine().toString() + "\n";
 				}
-			}			
+			}
+		}else{
+			text = Window.textArea.getText();		
 		}
 		
 		return text;
@@ -117,7 +125,7 @@ public class FileLoader {
 			if (file.exists()){
 				String tempLine;
 				if((tempLine = br.readLine()) == null){
-					System.out.println("Readline returns null");
+					
 				} else {
 					text += tempLine + "\n";
 					while((tempLine = br.readLine()) != null){
@@ -136,4 +144,5 @@ public class FileLoader {
 		
 		return text;
 	}
+	
 }
