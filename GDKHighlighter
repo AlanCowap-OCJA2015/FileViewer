@@ -94,10 +94,14 @@ public class GJKHighlighter {
 		
 	}
 	
-	public void setHighlightColor(Color pickedColor){
+	public void setHighLightColor(Color pickedColor){
 		
 		this.pickedColor = pickedColor;
 		
+	}
+	
+	public void setHighlightDarkness(){
+		this.pickedColor = this.pickedColor.darker();
 	}
 
 }
