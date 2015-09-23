@@ -43,7 +43,7 @@ public class FileLoaders {
 		
 		// If filename is empty then bring up a file selector window to pick one
 		if (filename == null || filename.length() == 0) {
-			filename = getFilename();
+			filename = getSourceFilename();
 		}
 
 		// Make sure input file name is valid before trying to open it
@@ -107,7 +107,7 @@ public class FileLoaders {
 
 		// If filename is empty then bring up a file selector window to pick one
 		if (filename == null || filename.length() == 0) {
-			filename = getFilename();
+			filename = getSourceFilename();
 		}
 
 		// Make sure input file name is valid before trying to open it
@@ -139,10 +139,10 @@ public class FileLoaders {
 
 		// If filename is empty then bring up a file selector window to pick one
 		if (filename == null || filename.length() == 0) {
-			filename = getFilename();
+			filename = getDestinationFilename();
 		}
 
-		// Make sure input file name is valid before trying to open it
+		// Do some sanity checking on the filename
 	    if (filename != null && filename.length() > 0) {
 	        // open file for input
 	        try {
@@ -188,11 +188,20 @@ public class FileLoaders {
 	}
 	
 	/**
-	 * Bring up the file selector window to get a filename
+	 * Bring up the file selector window to get a filename for loading
 	 */
-	static public String getFilename () {
+	static public String getSourceFilename () {
 		JFileChooser jfc = new JFileChooser(System.getProperty("user.dir"));
 		jfc.showOpenDialog(null);
+		return jfc.getSelectedFile().getPath();
+	}
+
+	/**
+	 * Bring up the file selector window to get a filename for saving
+	 */
+	static public String getDestinationFilename () {
+		JFileChooser jfc = new JFileChooser(System.getProperty("user.dir"));
+		jfc.showSaveDialog(null);
 		return jfc.getSelectedFile().getPath();
 	}
 }
