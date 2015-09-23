@@ -72,7 +72,7 @@ public class FileLoaders {
 	 * @param String to be written
 	 * @param filename to be written to
 	 */
-	public void write (String outputString, String filename) {
+	public void save (String outputString, String filename) {
 
 		// check just in case String was not initialised
 		if (outputString == null) return;
