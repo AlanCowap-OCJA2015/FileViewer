@@ -1,7 +1,6 @@
 /*
 * Contains logic behind loading keyword file and text file, a mediator between Window and FileLoader
 */
-
 import java.util.ArrayList;
 
 public class Logic{
